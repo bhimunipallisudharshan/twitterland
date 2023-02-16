@@ -1,14 +1,21 @@
 
-def registry = 'https://twittertrend.jfrog.io/'pipeline{
+def registry = 'https://twittertrend.jfrog.io/'
+pipeline{
     agent {
         node {
-            label "javabuildserver2"
+            label "buildserver@2"
         }
     }
     environment {
         PATH = "/opt/apache-maven-3.8.7/bin:$PATH"
     }
+
     stages {
+         stage('git clone') {
+            steps{
+               git branch: 'main', credentialsId: '2b1c00cf-2a02-4a7c-be83-2bf9ccc2ec88', url: 'https://github.com/bhimunipallisudharshan/twitterland.git'
+        }
+      }
         stage('build') {
             steps{
                 sh 'mvn clean deploy'
